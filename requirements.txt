@@ -1,9 +1,9 @@
 setuptools
 streamlit==1.44.1
-streamlit-image-coordinates
+streamlit-image-coordinates==0.2.1
 numpy
 Pillow==9.5.0
 matplotlib==3.7.1
-torch==1.13.1
-opencv-python==4.7.0.68
+torch==2.5.1
+opencv-python==4.11.0.86
 sam2==1.0
