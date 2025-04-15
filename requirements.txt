@@ -1,3 +1,4 @@
+setuptools
 streamlit==1.22.0
 streamlit-image-coordinates==0.1.0
 numpy==1.23.5
