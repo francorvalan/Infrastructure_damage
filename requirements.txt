@@ -1,7 +1,7 @@
 setuptools
 streamlit==1.44.1
 streamlit-image-coordinates
-numpy==1.23.5
+numpy
 Pillow==9.5.0
 matplotlib==3.7.1
 torch==1.13.1
