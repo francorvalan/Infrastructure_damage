@@ -1,0 +1,8 @@
+streamlit==1.22.0
+streamlit-image-coordinates==0.1.0
+numpy==1.23.5
+Pillow==9.5.0
+matplotlib==3.7.1
+torch==1.13.1
+opencv-python==4.7.0.68
+sam2==1.0
