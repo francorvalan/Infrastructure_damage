@@ -1,6 +1,6 @@
 setuptools
 streamlit==1.22.0
-streamlit-image-coordinates==0.1.0
+streamlit-image-coordinates==0.2.1
 numpy==1.23.5
 Pillow==9.5.0
 matplotlib==3.7.1
