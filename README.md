@@ -18,7 +18,7 @@
 
 
 <p align="center">
-  <img src="Data/Panel.PNG" width="350">
+  <img src="./Panel.PNG" width="350">
 </p>
 
 La aplicacion permite clasificar e identificar daños en infraestructuras mediante el uso de [SAM2](https://github.com/facebookresearch/sam2).
