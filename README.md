@@ -16,7 +16,10 @@
 
 </div>
 
-![SAM 2 architecture](Data/Panel.PNG)
+
+<p align="center">
+  <img src="Data/Panel.PNG" width="350" title="workflow">
+</p>
 
 La aplicacion permite clasificar e identificar daños en infraestructuras mediante el uso de [SAM2](https://github.com/facebookresearch/sam2).
 Para ello es necesario:
