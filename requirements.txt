@@ -1,8 +1,8 @@
 setuptools
+Pillow==10.3.0 --only-binary=:all:
 streamlit==1.44.1
 streamlit-image-coordinates==0.2.1
 numpy
-Pillow==9.5.0
 matplotlib==3.7.1
 torch==2.5.1
 opencv-python==4.11.0.86
