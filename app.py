@@ -25,12 +25,12 @@ from huggingface_hub import configure_http_backend
 
 # Configuración inicial
 
-# Descarga con autenticación (opcional) y manejo de caché
+# Descarga y manejo de caché
 MODEL_LOCAL_PATH = hf_hub_download(
     repo_id="facebook/sam2-hiera-large",
     filename="sam2_hiera_l.yaml",
-    cache_dir="models",  # Guarda en una carpeta local
-    force_download=False  # Evita redescargas
+    cache_dir="models",  
+    force_download=False 
 )
 CHECKPOINT_LOCAL_PATH = hf_hub_download(
     repo_id="facebook/sam2-hiera-large",
@@ -87,11 +87,10 @@ def show_mask(mask, ax, random_color=False, borders = True,label_col=None,alpha=
     mask = mask.astype(np.uint8)
     mask_image = mask.reshape(h, w, 1) * (color/255).reshape(1, 1, -1)
     
-    #print(mask_image)
     if borders:
         import cv2
         contours, _ = cv2.findContours(mask,cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE) 
-        # Try to smooth contours
+        
         contours = [cv2.approxPolyDP(contour, epsilon=epsilon, closed=True) for contour in contours]
         if label_col=='NA':
             mask_image = cv2.drawContours(mask_image, contours, -1, tuple(np.array([color[0]/255, color[1]/255, color[2]/255, 0])), thickness=thickness) 
@@ -261,7 +260,6 @@ class Clase_Daño:
 
     
     def determinar_plan_de_accion(self):
-        # Primero definimos los planes base para cada nivel de compromiso
         planes_base = {
             1: 'Cada 12 meses',
             2: 'Cada 6 meses',
@@ -270,7 +268,6 @@ class Clase_Daño:
             5: 'Menos de 1 mes'
         }
         
-        # Planes especiales para tipos de daño específicos
         planes_especiales = {
             'corrosión': {
                 1: 'Cada 6 meses',
@@ -279,16 +276,13 @@ class Clase_Daño:
                 4: 'Inmediato',
                 5: 'Inmediato'
             },
-            # Puedes añadir otros tipos de daño con planes especiales aquí
         }
         
         tipo_daño = self.tipo_daño.lower()
         
-        # Verificar si hay un plan especial para este tipo de daño
         if tipo_daño in planes_especiales and self.nivel_compromiso in planes_especiales[tipo_daño]:
             return planes_especiales[tipo_daño][self.nivel_compromiso]
         
-        # Si no hay plan especial, usar el plan base
         return planes_base.get(self.nivel_compromiso, 'No definido') 
 
     def determinar_clase_compromiso(self):
@@ -304,11 +298,10 @@ class Clase_Daño:
         elif self.nivel_compromiso == 5:
             return 'Casi seguro'
         else:
-            return 'Desconocido'  # En caso de que el nivel de compromiso no esté definido
+            return 'Desconocido'  
 
 
 def generar_figura_completa(image, best_masks2, Daño, colors2, Ancho_mascara):
-    # Configurar figura con 2 filas (imagen + leyenda)
     fig = plt.figure(figsize=(10, 8), dpi=100)
     gs_main = GridSpec(2, 1, height_ratios=[4, 1.5], hspace=0.05)
     
@@ -326,10 +319,7 @@ def generar_figura_completa(image, best_masks2, Daño, colors2, Ancho_mascara):
             thickness=Ancho_mascara, epsilon=1
         )
     
-    # --- Leyenda centrada y ancho igual ---
 
-    # --- Parte inferior: Leyenda ---
-    # Crear subgridspec manualmente
 
     gs_leyenda = GridSpecFromSubplotSpec(
             1, 2, 
@@ -346,8 +336,6 @@ def generar_figura_completa(image, best_masks2, Daño, colors2, Ancho_mascara):
     for ax in [ax_leyenda_izq, ax_leyenda_der]:
         ax.axis('off')
 
-    
-    # --- Código de la leyenda (adaptado) ---
     matrix = [
         [4, 4, 8, 12, 16],
         [3, 3, 6, 9, 12],
@@ -362,7 +350,7 @@ def generar_figura_completa(image, best_masks2, Daño, colors2, Ancho_mascara):
         16: '#ff3e17', np.nan: 'white'
     }
 
-    # Crear tabla
+    # tabla
     cell_colors = []
     for i, row in enumerate(matrix):
         new_row = []
@@ -378,7 +366,6 @@ def generar_figura_completa(image, best_masks2, Daño, colors2, Ancho_mascara):
         colWidths=[0.15]*5
     )
 
-    # Ajustar celdas
     for key, cell in tabla.get_celld().items():
         cell.set_height(0.18)
         cell.set_edgecolor('black')
@@ -396,7 +383,7 @@ def generar_figura_completa(image, best_masks2, Daño, colors2, Ancho_mascara):
     center_x, center_y = x1 + width/2, y1 + height/2
 
     circulo = Circle(
-        (center_x, center_y),  # Centro exacto
+        (center_x, center_y), 
         radius=width/2,
         color='black',
         fill=False,
@@ -405,7 +392,7 @@ def generar_figura_completa(image, best_masks2, Daño, colors2, Ancho_mascara):
     )
     ax_leyenda_izq.add_patch(circulo)
     circulo = Circle(
-        (center_x, center_y),  # Centro exacto
+        (center_x, center_y),  
         radius=width/2,
         color='red',
         fill=False,
@@ -565,14 +552,14 @@ def main():
                 plt.axis('off')
                 st.pyplot(fig)
                 
-            # Botón para limpiar selección
+            # limpiar selección
             if st.button("Limpiar selección"):
                 if 'boxes' in st.session_state:
                     del st.session_state.boxes
                 if 'pending_point' in st.session_state:
                     del st.session_state.pending_point
             
-        # Procesar al hacer clic en el botón
+        # Procesar
         if procesar:
             with st.spinner("Procesando..."):
                 # Validar que hay boxes seleccionados
