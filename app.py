@@ -19,25 +19,13 @@ if sys.platform == "win32" and (3, 8, 0) <= sys.version_info < (3, 9, 0):
 import torch
 import urllib.request
 import os
-from huggingface_hub import hf_hub_download
-from huggingface_hub import configure_http_backend
 
 
 # Configuración inicial
 
 # Descarga con autenticación (opcional) y manejo de caché
-MODEL_LOCAL_PATH = hf_hub_download(
-    repo_id="facebook/sam2-hiera-large",
-    filename="sam2_hiera_l.yaml",
-    cache_dir="models",  # Guarda en una carpeta local
-    force_download=False  # Evita redescargas
-)
-CHECKPOINT_LOCAL_PATH = hf_hub_download(
-    repo_id="facebook/sam2-hiera-large",
-    filename="sam2_hiera_large.pt",
-    cache_dir="models",
-    force_download=False
-)
+MODEL_LOCAL_PATH = os.path.join("models", "sam2_hiera_l.yaml")
+CHECKPOINT_LOCAL_PATH = os.path.join("models", "sam2_hiera_large.pt")
 
 OBJECTS = ['Daño', 'NA']
 st.set_page_config(layout="wide")
