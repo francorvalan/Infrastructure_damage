@@ -17,8 +17,33 @@ from matplotlib.gridspec import GridSpec, GridSpecFromSubplotSpec
 if sys.platform == "win32" and (3, 8, 0) <= sys.version_info < (3, 9, 0):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 import torch
+import urllib.request
+import os
+
 
 # Configuración inicial
+
+SAM2_MODEL_URL = "https://huggingface.co/facebook/sam2-hiera-large/resolve/main/sam2_hiera_l.yaml"
+SAM2_CHECKPOINT_URL = "https://huggingface.co/facebook/sam2-hiera-large/resolve/main/sam2_hiera_large.pt"
+
+# Nombres locales de los archivos (sin parámetros de descarga)
+MODEL_LOCAL_PATH = "sam2_hiera_l.yaml"
+CHECKPOINT_LOCAL_PATH = "sam2_hiera_large.pt"
+
+def download_file(url, local_path):
+    """Descarga un archivo si no existe localmente."""
+    if not os.path.exists(local_path):
+        try:
+            urllib.request.urlretrieve(url, local_path)
+            st.success(f"Archivo descargado: {local_path}")
+        except Exception as e:
+            st.error(f"Error al descargar {url}: {e}")
+            raise
+
+# --- Configuración inicial (descarga los archivos si no existen) ---
+download_file(SAM2_MODEL_URL, MODEL_LOCAL_PATH)
+download_file(SAM2_CHECKPOINT_URL, CHECKPOINT_LOCAL_PATH)
+
 OBJECTS = ['Daño', 'NA']
 st.set_page_config(layout="wide")
 
@@ -474,15 +499,16 @@ def main():
         # Botón de procesamiento
         procesar = st.button("Procesar imagen actual")
         
-        input_sam2_model = st.text_input("SAM2 model (.yaml):", value="C:/Users/francisco.corvalan/YOLO_models/sam2_hiera_l.yaml")
-        input_sam2_checkpoint= st.text_input("SAM2 checkpoints:", value="C:/Users/francisco.corvalan/YOLO_models/sam2_hiera_large.pt")
+        st.markdown("**Modelo SAM2:**")
+        st.info(f"✔ Modelo config: `{MODEL_LOCAL_PATH}`")
+        st.info(f"✔ Checkpoints: `{CHECKPOINT_LOCAL_PATH}`")
     
-    # Configuración inicial del modelo
+    # --- Configuración del modelo (usa las rutas locales) ---
     if 'predictor' not in st.session_state:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        sam2_model = build_sam2(input_sam2_model, input_sam2_checkpoint, device=device)
+        sam2_model = build_sam2(MODEL_LOCAL_PATH, CHECKPOINT_LOCAL_PATH, device=device)  # Usa las rutas descargadas
         st.session_state.predictor = SAM2ImagePredictor(sam2_model)
-    
+
     # Panel principal
     if st.session_state.images:
         current_image = st.session_state.images[st.session_state.current_idx]
