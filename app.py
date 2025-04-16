@@ -481,16 +481,30 @@ def main():
         
         # Botón de procesamiento
         procesar = st.button("Procesar imagen actual")
+        uploaded_model = st.file_uploader("Subir archivo de modelo (.yaml)", type=["yaml"])
+        uploaded_checkpoint = st.file_uploader("Subir archivo de pesos (.pt)", type=["pt"])
         
-        st.markdown("**Modelo SAM2:**")
-        st.info(f"✔ Modelo config: `{MODEL_LOCAL_PATH}`")
-        st.info(f"✔ Checkpoints: `{CHECKPOINT_LOCAL_PATH}`")
-    
-    # --- Configuración del modelo (usa las rutas locales) ---
-    if 'predictor' not in st.session_state:
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        sam2_model = build_sam2(MODEL_LOCAL_PATH, CHECKPOINT_LOCAL_PATH, device=device)  # Usa las rutas descargadas
-        st.session_state.predictor = SAM2ImagePredictor(sam2_model)
+        # 2. Guardar archivos temporalmente cuando se suban
+        if uploaded_model and uploaded_checkpoint:
+            # Crear carpeta temporal si no existe
+            os.makedirs("temp_models", exist_ok=True)
+            
+            # Guardar archivos
+            model_path = os.path.join("temp_models", "model.yaml")
+            checkpoint_path = os.path.join("temp_models", "checkpoint.pt")
+            
+            with open(model_path, "wb") as f:
+                f.write(uploaded_model.getbuffer())
+            with open(checkpoint_path, "wb") as f:
+                f.write(uploaded_checkpoint.getbuffer())
+            
+            st.success("¡Modelos cargados correctamente!")
+            
+            # 3. Inicializar el modelo solo si hay archivos nuevos
+            if 'predictor' not in st.session_state:
+                device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+                sam2_model = build_sam2(model_path, checkpoint_path, device=device)
+                st.session_state.predictor = SAM2ImagePredictor(sam2_model)
 
     # Panel principal
     if st.session_state.images:
