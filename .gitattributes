@@ -1,0 +1,2 @@
+models/*.pt filter=lfs diff=lfs merge=lfs -text
+models/*.yaml filter=lfs diff=lfs merge=lfs -text
