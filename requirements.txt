@@ -6,4 +6,4 @@ Pillow==9.5.0
 matplotlib==3.7.1
 torch==2.5.1
 opencv-python==4.11.0.86
-sam2==1.0
+sam2
