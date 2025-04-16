@@ -10,7 +10,7 @@
         <h2>
             <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/streamlit/streamlit-original.svg" 
                  alt="Demo2" 
-                 height="60" /> <a href="https://j4tekdygvbbhuhdkulpkov.streamlit.app/" target="_blank">Demo</a>
+                 height="60" /> <a href="https://infrastructuredamage-gjsgumfkipawmrykqbtg4a.streamlit.app/" target="_blank">Demo</a>
         </h2>
     </p>
 
